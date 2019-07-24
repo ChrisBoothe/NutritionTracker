@@ -11,11 +11,23 @@ namespace NutritionTracker
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            FoodEntities db = new FoodEntities();
 
+            var foodItems = db.FoodItems;
+
+            string result = "";
+
+            foreach (var foodItem in foodItems)
+            {
+                result += "<p>" + foodItem.Name + "<p/>";
+            }
+
+            ratioLabel.Text = result;
         }
 
         protected void addButton_Click(object sender, EventArgs e)
         {
+            /*
             var foodItems = new List<FoodItem>()
             {
                 new FoodItem{Name="Apple", Calories=90, Proteins=1, Carbs=20, Fats=1},
@@ -42,6 +54,7 @@ namespace NutritionTracker
             totalProteinsTextBox.Text = totalProteins.ToString();
             totalCarbsTextBox.Text = totalCarbs.ToString();
             totalFatsTextBox.Text = totalFats.ToString();
+            */
         }
     }
 }
