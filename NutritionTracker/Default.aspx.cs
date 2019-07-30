@@ -9,52 +9,75 @@ namespace NutritionTracker
 {
     public partial class Default : System.Web.UI.Page
     {
+        
         protected void Page_Load(object sender, EventArgs e)
         {
-            FoodEntities db = new FoodEntities();
-
-            var foodItems = db.FoodItems;
-
-            string result = "";
-
-            foreach (var foodItem in foodItems)
-            {
-                result += "<p>" + foodItem.Name + "<p/>";
-            }
-
-            ratioLabel.Text = result;
+           
+            
         }
 
         protected void addButton_Click(object sender, EventArgs e)
         {
-            /*
-            var foodItems = new List<FoodItem>()
-            {
-                new FoodItem{Name="Apple", Calories=90, Proteins=1, Carbs=20, Fats=1},
-                new FoodItem{Name="Sandwich", Calories=390, Proteins=10, Carbs=50, Fats=10},
-                new FoodItem{Name="Cheese Stick", Calories=120, Proteins=7, Carbs=14, Fats=7},
-                new FoodItem{Name="Bacon Slice", Calories=90, Proteins=6, Carbs=20, Fats=15}
-            };
+            FoodEntities db = new FoodEntities();
+            var dbfoodItems = db.FoodItems;
+            var newFoodItem = new FoodItem();
 
+            newFoodItem.FoodEntryId = Guid.NewGuid();
+            newFoodItem.Name = newNameTextBox.Text;
+            newFoodItem.Calories = int.Parse(newCaloriesTextBox.Text);
+            newFoodItem.Proteins = int.Parse(newProteinsTextBox.Text);
+            newFoodItem.Carbs = int.Parse(newCarbsTextBox.Text);
+            newFoodItem.Fats = int.Parse(newFatsTextBox.Text);
+            newFoodItem.DateEntered = DateTime.Now;
+
+            dbfoodItems.Add(newFoodItem);
+            
+           
+            //Delete SQL entries older than 7 days
+            foreach (var foodItem in dbfoodItems)
+            {
+                TimeSpan weekTimeFrame = DateTime.Today.Subtract(foodItem.DateEntered);
+
+                if (weekTimeFrame.TotalDays > 7)
+                {
+                    dbfoodItems.Remove(foodItem);
+                }
+            }
+
+            //UPDATE DATABASE
+            db.SaveChanges();
+
+            //Nutrient Totals
             var totalCalories = 0;
             var totalProteins = 0;
             var totalCarbs = 0;
             var totalFats = 0;
 
-
-            foreach (var foodItem in foodItems)
+            //Move this to DailyTotalsCalculator
+            foreach (var foodItem in dbfoodItems)
             {
-                totalCalories += foodItem.Calories;
-                totalProteins += foodItem.Proteins;
-                totalCarbs += foodItem.Carbs;
-                totalFats += foodItem.Fats;
+                if (foodItem.DateEntered.Date == DateTime.Today)
+                {
+                    totalCalories += foodItem.Calories;
+                    totalProteins += foodItem.Proteins;
+                    totalCarbs += foodItem.Carbs;
+                    totalFats += foodItem.Fats;
+                }
             }
 
-            totalCaloriesTextBox.Text = totalCalories.ToString();
-            totalProteinsTextBox.Text = totalProteins.ToString();
-            totalCarbsTextBox.Text = totalCarbs.ToString();
-            totalFatsTextBox.Text = totalFats.ToString();
-            */
+            DisplayDailyTotals(totalCalories, totalProteins, totalCarbs, totalFats);
+                                    
+            //Bind data to GridView
+            foodGridView.DataSource = dbfoodItems.ToList();
+            foodGridView.DataBind();
+        }
+
+        private void DisplayDailyTotals(int calories, int proteins, int carbs, int fats)
+        {
+            totalCaloriesTextBox.Text = calories.ToString();
+            totalProteinsTextBox.Text = proteins.ToString();
+            totalCarbsTextBox.Text = carbs.ToString();
+            totalFatsTextBox.Text = fats.ToString();
         }
     }
 }

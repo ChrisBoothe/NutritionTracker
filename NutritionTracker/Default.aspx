@@ -42,6 +42,10 @@
         <br />
         <br />
         <br />
+        <asp:GridView ID="foodGridView" runat="server">
+        </asp:GridView>
+        <br />
+        <br />
         <br />
         <br />
     </form>
