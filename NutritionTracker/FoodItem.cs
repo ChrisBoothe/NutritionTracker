@@ -20,8 +20,7 @@ namespace NutritionTracker
         public int Proteins { get; set; }
         public int Carbs { get; set; }
         public int Fats { get; set; }
-        public System.DateTime DateEntered { get; set; }
-                
+        public System.DateTime DateEntered { get; set; }                
     }
 
     

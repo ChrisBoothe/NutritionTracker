@@ -25,6 +25,7 @@
         <br />
         <asp:Button ID="addButton" runat="server" OnClick="addButton_Click" Text="Add Item" />
         <br />
+        <br />
         <h4>Today&#39;s Totals:</h4>
         Calories:&nbsp;&nbsp;&nbsp;
         <asp:TextBox ID="totalCaloriesTextBox" runat="server" Width="57px"></asp:TextBox>
@@ -37,8 +38,8 @@
         Fats:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:TextBox ID="totalFatsTextBox" runat="server" Width="57px"></asp:TextBox>
         <br />
-        Ratio:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Label ID="ratioLabel" runat="server"></asp:Label>
+        <br />
+        Your caloric breakdown:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="ratioLabel" runat="server"></asp:Label>
         <br />
         <br />
         <br />

@@ -19,9 +19,10 @@ namespace NutritionTracker
         protected void addButton_Click(object sender, EventArgs e)
         {
             FoodEntities db = new FoodEntities();
-            var dbfoodItems = db.FoodItems;
+            var dbFoodItems = db.FoodItems;
             var newFoodItem = new FoodItem();
-
+            var dailyTotalsCalculator = new DailyTotalsCalculator();
+                       
             newFoodItem.FoodEntryId = Guid.NewGuid();
             newFoodItem.Name = newNameTextBox.Text;
             newFoodItem.Calories = int.Parse(newCaloriesTextBox.Text);
@@ -30,54 +31,29 @@ namespace NutritionTracker
             newFoodItem.Fats = int.Parse(newFatsTextBox.Text);
             newFoodItem.DateEntered = DateTime.Now;
 
-            dbfoodItems.Add(newFoodItem);
-            
-           
-            //Delete SQL entries older than 7 days
-            foreach (var foodItem in dbfoodItems)
-            {
-                TimeSpan weekTimeFrame = DateTime.Today.Subtract(foodItem.DateEntered);
-
-                if (weekTimeFrame.TotalDays > 7)
-                {
-                    dbfoodItems.Remove(foodItem);
-                }
-            }
-
-            //UPDATE DATABASE
+            dbFoodItems.Add(newFoodItem);
+            FoodItemManager.RemoveOldEntries(dbFoodItems);
             db.SaveChanges();
-
-            //Nutrient Totals
-            var totalCalories = 0;
-            var totalProteins = 0;
-            var totalCarbs = 0;
-            var totalFats = 0;
-
-            //Move this to DailyTotalsCalculator
-            foreach (var foodItem in dbfoodItems)
-            {
-                if (foodItem.DateEntered.Date == DateTime.Today)
-                {
-                    totalCalories += foodItem.Calories;
-                    totalProteins += foodItem.Proteins;
-                    totalCarbs += foodItem.Carbs;
-                    totalFats += foodItem.Fats;
-                }
-            }
-
-            DisplayDailyTotals(totalCalories, totalProteins, totalCarbs, totalFats);
-                                    
-            //Bind data to GridView
-            foodGridView.DataSource = dbfoodItems.ToList();
+                        
+            dailyTotalsCalculator.SumMacros(dbFoodItems);
+            dailyTotalsCalculator.DetermineRatio(dbFoodItems);
+            DisplayDailyTotals(dailyTotalsCalculator);            
+            
+            foodGridView.DataSource = dbFoodItems.ToList();
             foodGridView.DataBind();
         }
 
-        private void DisplayDailyTotals(int calories, int proteins, int carbs, int fats)
+        private void DisplayDailyTotals(DailyTotalsCalculator dailyTotalsCalculator)
         {
-            totalCaloriesTextBox.Text = calories.ToString();
-            totalProteinsTextBox.Text = proteins.ToString();
-            totalCarbsTextBox.Text = carbs.ToString();
-            totalFatsTextBox.Text = fats.ToString();
+            totalCaloriesTextBox.Text = dailyTotalsCalculator.TotalCalories.ToString();
+            totalProteinsTextBox.Text = dailyTotalsCalculator.TotalProteins.ToString();
+            totalCarbsTextBox.Text = dailyTotalsCalculator.TotalCarbs.ToString();
+            totalFatsTextBox.Text = dailyTotalsCalculator.TotalFats.ToString();
+
+            ratioLabel.Text = string.Format("Proteins: {0:0.0}% - Carbs: {1:0.0}% - Fats: {2:0.0}%",
+               dailyTotalsCalculator.PercentProteins,
+               dailyTotalsCalculator.PercentCarbs,
+               dailyTotalsCalculator.PercentFats);
         }
     }
 }

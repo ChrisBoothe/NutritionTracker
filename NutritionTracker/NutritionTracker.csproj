@@ -120,6 +120,7 @@
     <Compile Include="FoodItem.cs">
       <DependentUpon>FoodEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="FoodItemManager.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
