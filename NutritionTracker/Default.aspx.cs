@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.Entity;
 
 namespace NutritionTracker
 {
@@ -47,7 +48,9 @@ namespace NutritionTracker
             DisplayDailyTotals(dailyTotalsCalculator);
             DisplayMacroRatio(dailyTotalsCalculator);
                        
-            foodGridView.DataSource = dbFoodItems/*.Where(p => p.DateEntered.Date == DateTime.Today)*/.OrderBy(p => p.DateEntered).ToList();                        
+            foodGridView.DataSource = dbFoodItems
+                .Where(p => DbFunctions.TruncateTime(p.DateEntered) == DateTime.Today)
+                .OrderBy(p => p.DateEntered).ToList();                        
             foodGridView.DataBind();
         }
 
@@ -61,7 +64,7 @@ namespace NutritionTracker
 
         private void DisplayMacroRatio(DailyTotalsCalculator dailyTotalsCalculator)
         {
-            ratioLabel.Text = string.Format("Proteins: {0:0.0}% <br/> Carbs: {1:0.0}% <br/> Fats: {2:0.0}%",
+            ratioLabel.Text = string.Format("Proteins: {0:0.00}% <br/> Carbs: {1:0.00}% <br/> Fats: {2:0.00}%",
                dailyTotalsCalculator.PercentProteins,
                dailyTotalsCalculator.PercentCarbs,
                dailyTotalsCalculator.PercentFats);

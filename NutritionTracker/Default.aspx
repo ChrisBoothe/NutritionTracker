@@ -43,46 +43,36 @@
                     <br />
                     <br />
                 </div>                
-                <div class="col-md-3">
-                    <div>    
-                        <h4>Today&#39;s Totals:</h4>                        
-                        Calories:<asp:Label ID="totalCaloriesLabel" runat="server"></asp:Label>                        
-                        <br />    
-                        Proteins:<asp:Label ID="totalProteinsLabel" runat="server"></asp:Label>
-                        <br />
-                        Carbs: <asp:Label ID="totalCarbsLabel" runat="server"></asp:Label>
-                        <br />
-                        Fats:<asp:Label ID="totalFatsLabel" runat="server"></asp:Label>
-                        <br />
-                        <br />
-                        Your caloric breakdown:
-                        <br />
-                        <asp:Label ID="ratioLabel" runat="server"></asp:Label>
-                        <br />
-                        <br />
-                        <br />
-                    </div>        
+                <div class="col-md-2">                        
+                    <h4>Today&#39;s Totals:</h4>                        
+                    Calories:<asp:Label ID="totalCaloriesLabel" runat="server" CssClass="float-md-right"></asp:Label>                        
+                    <br />    
+                    Proteins:<asp:Label ID="totalProteinsLabel" runat="server" CssClass="float-md-right"></asp:Label>
+                    <br />
+                    Carbs:<asp:Label ID="totalCarbsLabel" runat="server" CssClass="float-md-right"></asp:Label>
+                    <br />
+                    Fats:<asp:Label ID="totalFatsLabel" runat="server" CssClass="float-md-right"></asp:Label>
+                    <br />
+                    <br />
+                    Caloric breakdown:
+                    <br />
+                    <asp:Label ID="ratioLabel" runat="server"></asp:Label>
+                    <br />
+                    <br />
+                    <br />                            
                 </div>
-            </div>    
-         </div> 
-      <div>
-            <asp:GridView ID="foodGridView" runat="server">
-            </asp:GridView>
-            <br />
-            <br />
-            <asp:Chart ID="trendChart" runat="server">
-                <series>
-                   <asp:Series ChartType="Line" Name="Series1">
-                   </asp:Series>
-                </series>
-                <chartareas>
-                   <asp:ChartArea Name="ChartArea1">
-                   </asp:ChartArea>
-                </chartareas>
-            </asp:Chart>
-            <br />
-            <br />
-        </div>        
+            </div>            
+            <div class="row">
+            <div class="col-md-8">
+            <asp:GridView ID="foodGridView" runat="server" class="form-control">
+                </asp:GridView>
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>   
+        </div>              
     </form>        
     <script src="Scripts/jquery-3.4.1.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script> 
