@@ -76,40 +76,49 @@ namespace NutritionTracker {
         protected global::System.Web.UI.WebControls.Button addButton;
         
         /// <summary>
-        /// totalCaloriesTextBox control.
+        /// errorLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox totalCaloriesTextBox;
+        protected global::System.Web.UI.WebControls.Label errorLabel;
         
         /// <summary>
-        /// totalProteinsTextBox control.
+        /// totalCaloriesLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox totalProteinsTextBox;
+        protected global::System.Web.UI.WebControls.Label totalCaloriesLabel;
         
         /// <summary>
-        /// totalCarbsTextBox control.
+        /// totalProteinsLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox totalCarbsTextBox;
+        protected global::System.Web.UI.WebControls.Label totalProteinsLabel;
         
         /// <summary>
-        /// totalFatsTextBox control.
+        /// totalCarbsLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox totalFatsTextBox;
+        protected global::System.Web.UI.WebControls.Label totalCarbsLabel;
+        
+        /// <summary>
+        /// totalFatsLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label totalFatsLabel;
         
         /// <summary>
         /// ratioLabel control.
@@ -128,5 +137,14 @@ namespace NutritionTracker {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView foodGridView;
+        
+        /// <summary>
+        /// trendChart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.DataVisualization.Charting.Chart trendChart;
     }
 }

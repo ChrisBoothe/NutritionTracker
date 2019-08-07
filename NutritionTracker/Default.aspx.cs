@@ -12,8 +12,7 @@ namespace NutritionTracker
         
         protected void Page_Load(object sender, EventArgs e)
         {
-           
-            
+            errorLabel.Text = "";            
         }
 
         protected void addButton_Click(object sender, EventArgs e)
@@ -22,38 +21,61 @@ namespace NutritionTracker
             var dbFoodItems = db.FoodItems;
             var newFoodItem = new FoodItem();
             var dailyTotalsCalculator = new DailyTotalsCalculator();
-                       
-            newFoodItem.FoodEntryId = Guid.NewGuid();
-            newFoodItem.Name = newNameTextBox.Text;
-            newFoodItem.Calories = int.Parse(newCaloriesTextBox.Text);
-            newFoodItem.Proteins = int.Parse(newProteinsTextBox.Text);
-            newFoodItem.Carbs = int.Parse(newCarbsTextBox.Text);
-            newFoodItem.Fats = int.Parse(newFatsTextBox.Text);
-            newFoodItem.DateEntered = DateTime.Now;
 
+            int newCalories;
+            int newProteins;
+            int newCarbs;
+            int newFats;
+
+            if (!int.TryParse(newCaloriesTextBox.Text, out newCalories) ||
+                !int.TryParse(newProteinsTextBox.Text, out newProteins) ||
+                !int.TryParse(newCarbsTextBox.Text, out newCarbs) ||
+                !int.TryParse(newFatsTextBox.Text, out newFats))
+            {
+                errorLabel.Text = "You must input a valid number!";
+                return;
+            }
+
+            AssignUserInput(newFoodItem, newCalories, newProteins, newCarbs, newFats);
             dbFoodItems.Add(newFoodItem);
             FoodItemManager.RemoveOldEntries(dbFoodItems);
             db.SaveChanges();
                         
             dailyTotalsCalculator.SumMacros(dbFoodItems);
             dailyTotalsCalculator.DetermineRatio(dbFoodItems);
-            DisplayDailyTotals(dailyTotalsCalculator);            
-            
-            foodGridView.DataSource = dbFoodItems.ToList();
+
+            DisplayDailyTotals(dailyTotalsCalculator);
+            DisplayMacroRatio(dailyTotalsCalculator);
+                       
+            foodGridView.DataSource = dbFoodItems/*.Where(p => p.DateEntered.Date == DateTime.Today)*/.OrderBy(p => p.DateEntered).ToList();                        
             foodGridView.DataBind();
         }
 
         private void DisplayDailyTotals(DailyTotalsCalculator dailyTotalsCalculator)
         {
-            totalCaloriesTextBox.Text = dailyTotalsCalculator.TotalCalories.ToString();
-            totalProteinsTextBox.Text = dailyTotalsCalculator.TotalProteins.ToString();
-            totalCarbsTextBox.Text = dailyTotalsCalculator.TotalCarbs.ToString();
-            totalFatsTextBox.Text = dailyTotalsCalculator.TotalFats.ToString();
+            totalCaloriesLabel.Text = dailyTotalsCalculator.TotalCalories.ToString();
+            totalProteinsLabel.Text = dailyTotalsCalculator.TotalProteins.ToString();
+            totalCarbsLabel.Text = dailyTotalsCalculator.TotalCarbs.ToString();
+            totalFatsLabel.Text = dailyTotalsCalculator.TotalFats.ToString();
+        }
 
-            ratioLabel.Text = string.Format("Proteins: {0:0.0}% - Carbs: {1:0.0}% - Fats: {2:0.0}%",
+        private void DisplayMacroRatio(DailyTotalsCalculator dailyTotalsCalculator)
+        {
+            ratioLabel.Text = string.Format("Proteins: {0:0.0}% <br/> Carbs: {1:0.0}% <br/> Fats: {2:0.0}%",
                dailyTotalsCalculator.PercentProteins,
                dailyTotalsCalculator.PercentCarbs,
                dailyTotalsCalculator.PercentFats);
+        }
+
+        private void AssignUserInput(FoodItem newFoodItem, int calories, int proteins, int carbs, int fats)
+        {                      
+            newFoodItem.FoodEntryId = Guid.NewGuid();
+            newFoodItem.Name = newNameTextBox.Text;
+            newFoodItem.Calories = calories;
+            newFoodItem.Proteins = proteins;
+            newFoodItem.Carbs = carbs;
+            newFoodItem.Fats = fats;
+            newFoodItem.DateEntered = DateTime.Now;
         }
     }
 }
