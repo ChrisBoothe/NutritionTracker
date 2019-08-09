@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace NutritionTracker
 {
@@ -29,7 +30,7 @@ namespace NutritionTracker
             _totalMacros = 0.0;
         }
 
-        public void SumMacros(System.Data.Entity.DbSet<FoodItem> dbFoodItems)
+        public void SumMacros(DbSet<FoodItem> dbFoodItems)
         {
             foreach (var foodItem in dbFoodItems)
             {                
@@ -43,7 +44,7 @@ namespace NutritionTracker
             }            
         }
 
-        public void DetermineRatio(System.Data.Entity.DbSet<FoodItem> dbFoodItems)
+        public void DetermineRatio(DbSet<FoodItem> dbFoodItems)
         {
             _totalMacros = ((TotalProteins * 4) + (TotalCarbs * 4) + (TotalFats * 9));
             PercentProteins = ((TotalProteins * 4) / _totalMacros) * 100;

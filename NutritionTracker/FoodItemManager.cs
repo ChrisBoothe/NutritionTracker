@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace NutritionTracker
 {
     public class FoodItemManager
     {
-        public static void RemoveOldEntries(System.Data.Entity.DbSet<FoodItem> dbFoodItems)
+        public static void RemoveOldEntries(DbSet<FoodItem> dbFoodItems)
         {
             foreach (var foodItem in dbFoodItems)
             {

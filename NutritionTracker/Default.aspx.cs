@@ -9,8 +9,7 @@ using System.Data.Entity;
 namespace NutritionTracker
 {
     public partial class Default : System.Web.UI.Page
-    {
-        
+    { 
         protected void Page_Load(object sender, EventArgs e)
         {
             errorLabel.Text = "";            
@@ -23,6 +22,26 @@ namespace NutritionTracker
             var newFoodItem = new FoodItem();
             var dailyTotalsCalculator = new DailyTotalsCalculator();
 
+            if (!ObtainUserInput(newFoodItem))
+            {
+                errorLabel.Text = "You must input a valid number!";
+                return;
+            }
+
+            dbFoodItems.Add(newFoodItem);
+            FoodItemManager.RemoveOldEntries(dbFoodItems);
+            db.SaveChanges();
+                        
+            dailyTotalsCalculator.SumMacros(dbFoodItems);
+            dailyTotalsCalculator.DetermineRatio(dbFoodItems);
+                        
+            DisplayDailyTotals(dailyTotalsCalculator);
+            DisplayMacroRatio(dailyTotalsCalculator);
+            DisplayDailyGrid(dbFoodItems);
+        }
+
+        private bool ObtainUserInput(FoodItem newFoodItem)
+        {
             int newCalories;
             int newProteins;
             int newCarbs;
@@ -34,24 +53,25 @@ namespace NutritionTracker
                 !int.TryParse(newFatsTextBox.Text, out newFats))
             {
                 errorLabel.Text = "You must input a valid number!";
-                return;
+                return false;
             }
 
-            AssignUserInput(newFoodItem, newCalories, newProteins, newCarbs, newFats);
-            dbFoodItems.Add(newFoodItem);
-            FoodItemManager.RemoveOldEntries(dbFoodItems);
-            db.SaveChanges();
-                        
-            dailyTotalsCalculator.SumMacros(dbFoodItems);
-            dailyTotalsCalculator.DetermineRatio(dbFoodItems);
+            else
+            {
+                AssignUserInput(newFoodItem, newCalories, newProteins, newCarbs, newFats);
+                return true;
+            }
+        }
 
-            DisplayDailyTotals(dailyTotalsCalculator);
-            DisplayMacroRatio(dailyTotalsCalculator);
-                       
-            foodGridView.DataSource = dbFoodItems
-                .Where(p => DbFunctions.TruncateTime(p.DateEntered) == DateTime.Today)
-                .OrderBy(p => p.DateEntered).ToList();                        
-            foodGridView.DataBind();
+        private void AssignUserInput(FoodItem newFoodItem, int newCalories, int newProteins, int newCarbs, int newFats)
+        {
+            newFoodItem.FoodEntryId = Guid.NewGuid();
+            newFoodItem.Name = newNameTextBox.Text;
+            newFoodItem.Calories = newCalories;
+            newFoodItem.Proteins = newProteins;
+            newFoodItem.Carbs = newCarbs;
+            newFoodItem.Fats = newFats;
+            newFoodItem.DateEntered = DateTime.Now;            
         }
 
         private void DisplayDailyTotals(DailyTotalsCalculator dailyTotalsCalculator)
@@ -70,15 +90,13 @@ namespace NutritionTracker
                dailyTotalsCalculator.PercentFats);
         }
 
-        private void AssignUserInput(FoodItem newFoodItem, int calories, int proteins, int carbs, int fats)
-        {                      
-            newFoodItem.FoodEntryId = Guid.NewGuid();
-            newFoodItem.Name = newNameTextBox.Text;
-            newFoodItem.Calories = calories;
-            newFoodItem.Proteins = proteins;
-            newFoodItem.Carbs = carbs;
-            newFoodItem.Fats = fats;
-            newFoodItem.DateEntered = DateTime.Now;
+        private void DisplayDailyGrid(DbSet<FoodItem> dbFoodItems)
+        {
+            foodGridView.DataSource = dbFoodItems
+                .Where(p => DbFunctions.TruncateTime(p.DateEntered) == DateTime.Today)
+                .OrderBy(p => p.DateEntered).ToList();
+            foodGridView.DataBind();
         }
+           
     }
 }

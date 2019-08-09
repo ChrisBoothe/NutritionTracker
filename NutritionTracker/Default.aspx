@@ -18,7 +18,7 @@
                 <p class="lead">&nbsp;</p>
             </div>
             <div class="row">
-                <div class="col-md-6">                    
+                <div class="col-md-4">                    
                     <h4>New Food Item:</h4>                    
                     <div class="form-group">
                         <asp:TextBox ID="newNameTextBox" runat="server" class="form-control" placeholder ="Enter food name"></asp:TextBox>
@@ -63,18 +63,23 @@
                 </div>
             </div>            
             <div class="row">
-            <div class="col-md-8">
-            <asp:GridView ID="foodGridView" runat="server" class="form-control">
-                </asp:GridView>
-                <br />
-                <br />
-                <br />
-                <br />
-            </div>
-        </div>   
-        </div>              
-    </form>        
+                <div class="col-md-6">
+                    <h4>Today's Food Items:</h4>
+                    <asp:GridView ID="foodGridView" runat="server" Cssclass="table-sm table-striped table-responsive table-hover" AutoGenerateColumns="False">
+                        <Columns>
+                            <asp:BoundField DataField="Name" HeaderText="Name"></asp:BoundField>
+                            <asp:BoundField DataField="Calories" HeaderText="Calories"></asp:BoundField>
+                            <asp:BoundField DataField="Proteins" HeaderText="Proteins"></asp:BoundField>
+                            <asp:BoundField DataField="Carbs" HeaderText="Carbs"></asp:BoundField>
+                            <asp:BoundField DataField="Fats" HeaderText="Fats"></asp:BoundField>
+                        </Columns>
+                        <HeaderStyle CssClass="thead-dark" />
+                    </asp:GridView>                    
+                </div>
+            </div>   
+        </div> 
     <script src="Scripts/jquery-3.4.1.min.js"></script>
-    <script src="Scripts/bootstrap.min.js"></script> 
-</body>
+    <script src="Scripts/bootstrap.min.js"></script>
+    </form>        
+    </body>
 </html>
