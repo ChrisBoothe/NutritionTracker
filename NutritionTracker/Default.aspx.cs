@@ -11,7 +11,19 @@ namespace NutritionTracker
     public partial class Default : System.Web.UI.Page
     { 
         protected void Page_Load(object sender, EventArgs e)
-        {            
+        {   
+            if (!Page.IsPostBack)
+            {
+                FoodEntities db = new FoodEntities();
+                var dbFoodItems = db.FoodItems;
+                var dailyTotalsCalculator = new DailyTotalsCalculator();
+
+                dailyTotalsCalculator.SumMacros(dbFoodItems);
+                dailyTotalsCalculator.DetermineRatio(dbFoodItems);
+
+                DisplayData(dailyTotalsCalculator, dbFoodItems);
+            }
+
             errorLabel.Text = "";            
         }
 
@@ -34,11 +46,8 @@ namespace NutritionTracker
                         
             dailyTotalsCalculator.SumMacros(dbFoodItems);
             dailyTotalsCalculator.DetermineRatio(dbFoodItems);
-                        
-            DisplayDailyTotals(dailyTotalsCalculator);
-            DisplayMacroRatio(dailyTotalsCalculator);
-            DisplayDailyGrid(dbFoodItems);
-            ClearUserInput();
+
+            DisplayData(dailyTotalsCalculator, dbFoodItems);
         }
 
         private bool ObtainUserInput(FoodItem newFoodItem)
@@ -74,6 +83,14 @@ namespace NutritionTracker
             newFoodItem.DateEntered = DateTime.Now;            
         }
 
+        private void DisplayData(DailyTotalsCalculator dailyTotalsCalculator, DbSet<FoodItem> dbFoodItems)
+        {
+            DisplayDailyTotals(dailyTotalsCalculator);
+            DisplayMacroRatio(dailyTotalsCalculator);
+            DisplayDailyGrid(dbFoodItems);
+            ClearUserInput();
+        }
+
         private void DisplayDailyTotals(DailyTotalsCalculator dailyTotalsCalculator)
         {
             totalCaloriesLabel.Text = dailyTotalsCalculator.TotalCalories.ToString();
@@ -106,6 +123,5 @@ namespace NutritionTracker
             newCarbsTextBox.Text = "";
             newFatsTextBox.Text = "";
         }
-           
     }
 }
