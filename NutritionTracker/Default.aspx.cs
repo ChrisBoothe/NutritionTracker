@@ -11,7 +11,7 @@ namespace NutritionTracker
     public partial class Default : System.Web.UI.Page
     { 
         protected void Page_Load(object sender, EventArgs e)
-        {
+        {            
             errorLabel.Text = "";            
         }
 
@@ -38,6 +38,7 @@ namespace NutritionTracker
             DisplayDailyTotals(dailyTotalsCalculator);
             DisplayMacroRatio(dailyTotalsCalculator);
             DisplayDailyGrid(dbFoodItems);
+            ClearUserInput();
         }
 
         private bool ObtainUserInput(FoodItem newFoodItem)
@@ -51,8 +52,7 @@ namespace NutritionTracker
                 !int.TryParse(newProteinsTextBox.Text, out newProteins) ||
                 !int.TryParse(newCarbsTextBox.Text, out newCarbs) ||
                 !int.TryParse(newFatsTextBox.Text, out newFats))
-            {
-                errorLabel.Text = "You must input a valid number!";
+            {                
                 return false;
             }
 
@@ -60,7 +60,7 @@ namespace NutritionTracker
             {
                 AssignUserInput(newFoodItem, newCalories, newProteins, newCarbs, newFats);
                 return true;
-            }
+            }            
         }
 
         private void AssignUserInput(FoodItem newFoodItem, int newCalories, int newProteins, int newCarbs, int newFats)
@@ -96,6 +96,15 @@ namespace NutritionTracker
                 .Where(p => DbFunctions.TruncateTime(p.DateEntered) == DateTime.Today)
                 .OrderBy(p => p.DateEntered).ToList();
             foodGridView.DataBind();
+        }
+
+        private void ClearUserInput()
+        {
+            newNameTextBox.Text = "";
+            newCaloriesTextBox.Text = "";
+            newProteinsTextBox.Text = "";
+            newCarbsTextBox.Text = "";
+            newFatsTextBox.Text = "";
         }
            
     }
