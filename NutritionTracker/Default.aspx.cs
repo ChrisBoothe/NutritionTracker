@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.Entity;
+using System.Web.UI.DataVisualization.Charting;
 
 namespace NutritionTracker
 {
@@ -20,8 +21,9 @@ namespace NutritionTracker
 
                 dailyTotalsCalculator.SumMacros(dbFoodItems);
                 dailyTotalsCalculator.DetermineRatio(dbFoodItems);
-
                 DisplayData(dailyTotalsCalculator, dbFoodItems);
+                DisplayRatioChart(dailyTotalsCalculator);
+                DisplayTrendChart();
             }
 
             errorLabel.Text = "";            
@@ -42,12 +44,11 @@ namespace NutritionTracker
 
             dbFoodItems.Add(newFoodItem);
             FoodItemManager.RemoveOldEntries(dbFoodItems);
-            db.SaveChanges();
-                        
+            db.SaveChanges();                        
             dailyTotalsCalculator.SumMacros(dbFoodItems);
             dailyTotalsCalculator.DetermineRatio(dbFoodItems);
-
             DisplayData(dailyTotalsCalculator, dbFoodItems);
+            DisplayRatioChart(dailyTotalsCalculator);
         }
 
         private bool ObtainUserInput(FoodItem newFoodItem)
@@ -101,10 +102,30 @@ namespace NutritionTracker
 
         private void DisplayMacroRatio(DailyTotalsCalculator dailyTotalsCalculator)
         {
-            ratioLabel.Text = string.Format("Proteins: {0:0.00}% <br/> Carbs: {1:0.00}% <br/> Fats: {2:0.00}%",
-               dailyTotalsCalculator.PercentProteins,
-               dailyTotalsCalculator.PercentCarbs,
-               dailyTotalsCalculator.PercentFats);
+            ratioProteinsLabel.Text = string.Format("{0:0.00}%", dailyTotalsCalculator.PercentProteins);               
+            ratioCarbsLabel.Text = string.Format("{0:0.00}%", dailyTotalsCalculator.PercentCarbs);
+            ratioFatsLabel.Text = string.Format("{0:0.00}%", dailyTotalsCalculator.PercentFats);
+        }
+
+        private void DisplayRatioChart(DailyTotalsCalculator dailyTotalsCalculator)
+        {
+            Series series = Chart1.Series["Series1"];
+            series.Points.AddXY("Proteins", dailyTotalsCalculator.PercentProteins);
+            series.Points.AddXY("Carbs", dailyTotalsCalculator.PercentCarbs);
+            series.Points.AddXY("Fats", dailyTotalsCalculator.PercentFats);
+        }
+
+        private void DisplayTrendChart()
+        {
+            Series series2 = Chart2.Series["Series1"];
+            series2.Points.AddXY(DateTime.Today, 1000);
+            series2.Points.AddXY(DateTime.Today.AddDays(-1), 1300);
+            series2.Points.AddXY(DateTime.Today.AddDays(-2), 1200);
+            series2.Points.AddXY(DateTime.Today.AddDays(-3), 1300);
+            series2.Points.AddXY(DateTime.Today.AddDays(-4), 1700);
+            series2.Points.AddXY(DateTime.Today.AddDays(-5), 1300);
+            series2.Points.AddXY(DateTime.Today.AddDays(-6), 1200);
+
         }
 
         private void DisplayDailyGrid(DbSet<FoodItem> dbFoodItems)

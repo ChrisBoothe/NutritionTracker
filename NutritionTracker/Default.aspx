@@ -54,16 +54,31 @@
                     Fats:<asp:Label ID="totalFatsLabel" runat="server" CssClass="float-md-right"></asp:Label>
                     <br />
                     <br />
-                    Caloric breakdown:
+                    <h5>Caloric Ratio:</h5>                    
+                    Proteins:<asp:Label ID="ratioProteinsLabel" runat="server" CssClass="float-md-right"></asp:Label>
                     <br />
-                    <asp:Label ID="ratioLabel" runat="server"></asp:Label>
+                    Carbs:<asp:Label ID="ratioCarbsLabel" runat="server" CssClass="float-md-right"></asp:Label>
+                    <br />
+                    Fats:<asp:Label ID="ratioFatsLabel" runat="server" CssClass="float-md-right"></asp:Label>
                     <br />
                     <br />
-                    <br />                            
+                </div>
+                <div class ="col-md-2">                    
+                    <asp:Chart ID="Chart1" runat="server" Cssclass="">
+                        <Series>
+                            <asp:Series ChartType="Pie" Name="Series1">
+                            </asp:Series>
+                        </Series>
+                        <ChartAreas>
+                            <asp:ChartArea Name="ChartArea1">
+                            </asp:ChartArea>
+                        </ChartAreas>
+                    </asp:Chart>
+                    <br />
                 </div>
             </div>            
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h4>Today's Food Items:</h4>
                     <asp:GridView ID="foodGridView" runat="server" Cssclass="table-sm table-striped table-responsive table-hover" AutoGenerateColumns="False">
                         <Columns>
@@ -76,10 +91,25 @@
                         <HeaderStyle CssClass="thead-dark" />
                     </asp:GridView>                    
                 </div>
+                <div class="col-md-4">
+                    <h4>Weekly Trend:</h4>
+                    <asp:Chart ID="Chart2" runat="server" Width="562px">
+                        <Series>
+                            <asp:Series ChartType="Line" Name="Series1">
+                            </asp:Series>
+                        </Series>
+                        <ChartAreas>
+                            <asp:ChartArea Name="ChartArea1">
+                            </asp:ChartArea>
+                        </ChartAreas>
+                    </asp:Chart>
+                    <br />
+                    <br />
+                </div>
             </div>   
         </div> 
     <script src="Scripts/jquery-3.4.1.min.js"></script>
-    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>        
     </form>        
     </body>
 </html>

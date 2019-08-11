@@ -27,7 +27,7 @@ namespace NutritionTracker
             PercentProteins = 0.0;
             PercentCarbs = 0.0;
             PercentFats = 0.0;
-            _totalMacros = 0.0;
+            _totalMacros = 0.0;            
         }
 
         public void SumMacros(DbSet<FoodItem> dbFoodItems)
