@@ -51,5 +51,20 @@ namespace NutritionTracker
             PercentCarbs = ((TotalCarbs * 4) / _totalMacros) * 100;
             PercentFats = ((TotalFats * 9) / _totalMacros) * 100;            
         }
+
+        public int DetermineCalorieTrend(DbSet<FoodItem> dbFoodItems, DateTime dateTime)
+        {
+            var totalCalories = 0;
+
+            foreach (var foodItem in dbFoodItems)
+            {
+                if (foodItem.DateEntered.Date == dateTime)
+                {
+                    totalCalories += foodItem.Calories;                    
+                }
+            }
+
+            return totalCalories;
+        }
     }
 }

@@ -21,9 +21,7 @@ namespace NutritionTracker
 
                 dailyTotalsCalculator.SumMacros(dbFoodItems);
                 dailyTotalsCalculator.DetermineRatio(dbFoodItems);
-                DisplayData(dailyTotalsCalculator, dbFoodItems);
-                DisplayRatioChart(dailyTotalsCalculator);
-                DisplayTrendChart();
+                DisplayData(dailyTotalsCalculator, dbFoodItems);                
             }
 
             errorLabel.Text = "";            
@@ -48,7 +46,6 @@ namespace NutritionTracker
             dailyTotalsCalculator.SumMacros(dbFoodItems);
             dailyTotalsCalculator.DetermineRatio(dbFoodItems);
             DisplayData(dailyTotalsCalculator, dbFoodItems);
-            DisplayRatioChart(dailyTotalsCalculator);
         }
 
         private bool ObtainUserInput(FoodItem newFoodItem)
@@ -89,6 +86,8 @@ namespace NutritionTracker
             DisplayDailyTotals(dailyTotalsCalculator);
             DisplayMacroRatio(dailyTotalsCalculator);
             DisplayDailyGrid(dbFoodItems);
+            DisplayRatioChart(dailyTotalsCalculator);
+            DisplayTrendChart(dailyTotalsCalculator, dbFoodItems);
             ClearUserInput();
         }
 
@@ -115,17 +114,14 @@ namespace NutritionTracker
             series.Points.AddXY("Fats", dailyTotalsCalculator.PercentFats);
         }
 
-        private void DisplayTrendChart()
+        private void DisplayTrendChart(DailyTotalsCalculator dailyTotalsCalculator, DbSet<FoodItem> dbFoodItems)
         {
-            Series series2 = Chart2.Series["Series1"];
-            series2.Points.AddXY(DateTime.Today, 1000);
-            series2.Points.AddXY(DateTime.Today.AddDays(-1), 1300);
-            series2.Points.AddXY(DateTime.Today.AddDays(-2), 1200);
-            series2.Points.AddXY(DateTime.Today.AddDays(-3), 1300);
-            series2.Points.AddXY(DateTime.Today.AddDays(-4), 1700);
-            series2.Points.AddXY(DateTime.Today.AddDays(-5), 1300);
-            series2.Points.AddXY(DateTime.Today.AddDays(-6), 1200);
-
+            Series series2 = Chart2.Series["Series1"];            
+            for (int i = 0; i > -7; i--)
+            {
+                series2.Points.AddXY(DateTime.Today.AddDays(i),
+                dailyTotalsCalculator.DetermineCalorieTrend(dbFoodItems, DateTime.Today.AddDays(i)));
+            }
         }
 
         private void DisplayDailyGrid(DbSet<FoodItem> dbFoodItems)
