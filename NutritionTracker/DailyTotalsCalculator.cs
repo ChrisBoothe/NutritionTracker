@@ -32,16 +32,14 @@ namespace NutritionTracker
 
         public void SumMacros(DbSet<FoodItem> dbFoodItems)
         {
-            foreach (var foodItem in dbFoodItems)
-            {                
+            foreach (var foodItem in dbFoodItems)                            
                 if (foodItem.DateEntered.Date == DateTime.Today)
                 {
                     TotalCalories += foodItem.Calories;
                     TotalProteins += foodItem.Proteins;
                     TotalCarbs += foodItem.Carbs;
                     TotalFats += foodItem.Fats;
-                }                
-            }            
+                }   
         }
 
         public void DetermineRatio(DbSet<FoodItem> dbFoodItems)
@@ -56,14 +54,10 @@ namespace NutritionTracker
         {
             var totalCalories = 0;
 
-            foreach (var foodItem in dbFoodItems)
-            {
-                if (foodItem.DateEntered.Date == dateTime)
-                {
-                    totalCalories += foodItem.Calories;                    
-                }
-            }
-
+            foreach (var foodItem in dbFoodItems)            
+                if (foodItem.DateEntered.Date == dateTime)                
+                    totalCalories += foodItem.Calories;
+            
             return totalCalories;
         }
     }

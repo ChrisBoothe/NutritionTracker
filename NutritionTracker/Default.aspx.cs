@@ -15,13 +15,10 @@ namespace NutritionTracker
         {   
             if (!Page.IsPostBack)
             {
-                FoodEntities db = new FoodEntities();
-                var dbFoodItems = db.FoodItems;
-                var dailyTotalsCalculator = new DailyTotalsCalculator();
-
-                dailyTotalsCalculator.SumMacros(dbFoodItems);
-                dailyTotalsCalculator.DetermineRatio(dbFoodItems);
-                DisplayData(dailyTotalsCalculator, dbFoodItems);                
+                var foodItemManager = new FoodItemManager();                                
+                foodItemManager.Calculator.SumMacros(foodItemManager.DbFoodItems);
+                foodItemManager.Calculator.DetermineRatio(foodItemManager.DbFoodItems);
+                DisplayData(foodItemManager.Calculator, foodItemManager.DbFoodItems);
             }
 
             errorLabel.Text = "";            
@@ -29,27 +26,28 @@ namespace NutritionTracker
 
         protected void addButton_Click(object sender, EventArgs e)
         {
-            FoodEntities db = new FoodEntities();
-            var dbFoodItems = db.FoodItems;
-            var newFoodItem = new FoodItem();
-            var dailyTotalsCalculator = new DailyTotalsCalculator();
+            //Move database management items to FoodItemManager class
+            //Create controller class
+            //Create unit testing class
+            //Create method to generate PDF report            
 
-            if (!ObtainUserInput(newFoodItem))
+            var foodItemManager = new FoodItemManager();            
+
+            if (!ObtainUserInput(foodItemManager.NewFoodItem))
             {
                 errorLabel.Text = "You must input a valid number!";
                 return;
             }
-
-            dbFoodItems.Add(newFoodItem);
-            FoodItemManager.RemoveOldEntries(dbFoodItems);
-            db.SaveChanges();                        
-            dailyTotalsCalculator.SumMacros(dbFoodItems);
-            dailyTotalsCalculator.DetermineRatio(dbFoodItems);
-            DisplayData(dailyTotalsCalculator, dbFoodItems);
+            
+            foodItemManager.UpdateDatabase();
+            foodItemManager.Calculator.SumMacros(foodItemManager.DbFoodItems);
+            foodItemManager.Calculator.DetermineRatio(foodItemManager.DbFoodItems);
+            DisplayData(foodItemManager.Calculator, foodItemManager.DbFoodItems);
         }
 
         private bool ObtainUserInput(FoodItem newFoodItem)
         {
+            string newName = newNameTextBox.Text;
             int newCalories;
             int newProteins;
             int newCarbs;
@@ -65,15 +63,15 @@ namespace NutritionTracker
 
             else
             {
-                AssignUserInput(newFoodItem, newCalories, newProteins, newCarbs, newFats);
+                AssignUserInput(newFoodItem, newName, newCalories, newProteins, newCarbs, newFats);
                 return true;
             }            
         }
 
-        private void AssignUserInput(FoodItem newFoodItem, int newCalories, int newProteins, int newCarbs, int newFats)
+        private void AssignUserInput(FoodItem newFoodItem, string newName, int newCalories, int newProteins, int newCarbs, int newFats)
         {
             newFoodItem.FoodEntryId = Guid.NewGuid();
-            newFoodItem.Name = newNameTextBox.Text;
+            newFoodItem.Name = newName;
             newFoodItem.Calories = newCalories;
             newFoodItem.Proteins = newProteins;
             newFoodItem.Carbs = newCarbs;
