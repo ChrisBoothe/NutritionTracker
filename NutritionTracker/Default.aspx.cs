@@ -32,7 +32,7 @@ namespace NutritionTracker
         { 
             var foodItemManager = new FoodItemManager();            
 
-            if (!foodItemManager.ObtainUserInput(foodItemManager.NewFoodItem, 
+            if (!foodItemManager.ValidateUserInput(foodItemManager.NewFoodItem, 
                 newNameTextBox.Text, 
                 newCaloriesTextBox.Text,
                 newProteinsTextBox.Text, 

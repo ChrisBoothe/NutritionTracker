@@ -22,8 +22,8 @@ namespace NutritionTracker
             Calculator = new DailyTotalsCalculator();
         }
 
-        public bool ObtainUserInput(FoodItem newFoodItem, string nameText, string caloriesText, string proteinsText, 
-            string carbsText, string fatsText)
+        public bool ValidateUserInput(FoodItem newFoodItem, string nameText, string caloriesText, 
+            string proteinsText, string carbsText, string fatsText)
         {            
             int newCalories;
             int newProteins;
@@ -45,7 +45,8 @@ namespace NutritionTracker
             }
         }
 
-        private void AssignUserInput(FoodItem newFoodItem, string newName, int newCalories, int newProteins, int newCarbs, int newFats)
+        private void AssignUserInput(FoodItem newFoodItem, string newName, int newCalories, 
+            int newProteins, int newCarbs, int newFats)
         {
             newFoodItem.FoodEntryId = Guid.NewGuid();
             newFoodItem.Name = newName;
