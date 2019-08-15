@@ -22,6 +22,40 @@ namespace NutritionTracker
             Calculator = new DailyTotalsCalculator();
         }
 
+        public bool ObtainUserInput(FoodItem newFoodItem, string nameText, string caloriesText, string proteinsText, 
+            string carbsText, string fatsText)
+        {            
+            int newCalories;
+            int newProteins;
+            int newCarbs;
+            int newFats;
+
+            if (!int.TryParse(caloriesText, out newCalories) ||
+                !int.TryParse(proteinsText, out newProteins) ||
+                !int.TryParse(carbsText, out newCarbs) ||
+                !int.TryParse(fatsText, out newFats))
+            {
+                return false;
+            }
+
+            else
+            {
+                AssignUserInput(newFoodItem, nameText, newCalories, newProteins, newCarbs, newFats);
+                return true;
+            }
+        }
+
+        private void AssignUserInput(FoodItem newFoodItem, string newName, int newCalories, int newProteins, int newCarbs, int newFats)
+        {
+            newFoodItem.FoodEntryId = Guid.NewGuid();
+            newFoodItem.Name = newName;
+            newFoodItem.Calories = newCalories;
+            newFoodItem.Proteins = newProteins;
+            newFoodItem.Carbs = newCarbs;
+            newFoodItem.Fats = newFats;
+            newFoodItem.DateEntered = DateTime.Now;
+        }
+
         public void UpdateDatabase()
         {
             RemoveOldEntries(DbFoodItems);

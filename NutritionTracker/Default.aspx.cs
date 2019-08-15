@@ -11,6 +11,10 @@ namespace NutritionTracker
 {
     public partial class Default : System.Web.UI.Page
     { 
+        //Add method to generate PDF report
+        //Add unit testing class
+        //Add input validation for food Name
+
         protected void Page_Load(object sender, EventArgs e)
         {   
             if (!Page.IsPostBack)
@@ -25,15 +29,15 @@ namespace NutritionTracker
         }
 
         protected void addButton_Click(object sender, EventArgs e)
-        {
-            //Move database management items to FoodItemManager class
-            //Create controller class
-            //Create unit testing class
-            //Create method to generate PDF report            
-
+        { 
             var foodItemManager = new FoodItemManager();            
 
-            if (!ObtainUserInput(foodItemManager.NewFoodItem))
+            if (!foodItemManager.ObtainUserInput(foodItemManager.NewFoodItem, 
+                newNameTextBox.Text, 
+                newCaloriesTextBox.Text,
+                newProteinsTextBox.Text, 
+                newCarbsTextBox.Text, 
+                newFatsTextBox.Text))
             {
                 errorLabel.Text = "You must input a valid number!";
                 return;
@@ -43,41 +47,7 @@ namespace NutritionTracker
             foodItemManager.Calculator.SumMacros(foodItemManager.DbFoodItems);
             foodItemManager.Calculator.DetermineRatio(foodItemManager.DbFoodItems);
             DisplayData(foodItemManager.Calculator, foodItemManager.DbFoodItems);
-        }
-
-        private bool ObtainUserInput(FoodItem newFoodItem)
-        {
-            string newName = newNameTextBox.Text;
-            int newCalories;
-            int newProteins;
-            int newCarbs;
-            int newFats;
-
-            if (!int.TryParse(newCaloriesTextBox.Text, out newCalories) ||
-                !int.TryParse(newProteinsTextBox.Text, out newProteins) ||
-                !int.TryParse(newCarbsTextBox.Text, out newCarbs) ||
-                !int.TryParse(newFatsTextBox.Text, out newFats))
-            {                
-                return false;
-            }
-
-            else
-            {
-                AssignUserInput(newFoodItem, newName, newCalories, newProteins, newCarbs, newFats);
-                return true;
-            }            
-        }
-
-        private void AssignUserInput(FoodItem newFoodItem, string newName, int newCalories, int newProteins, int newCarbs, int newFats)
-        {
-            newFoodItem.FoodEntryId = Guid.NewGuid();
-            newFoodItem.Name = newName;
-            newFoodItem.Calories = newCalories;
-            newFoodItem.Proteins = newProteins;
-            newFoodItem.Carbs = newCarbs;
-            newFoodItem.Fats = newFats;
-            newFoodItem.DateEntered = DateTime.Now;            
-        }
+        }        
 
         private void DisplayData(DailyTotalsCalculator dailyTotalsCalculator, DbSet<FoodItem> dbFoodItems)
         {
