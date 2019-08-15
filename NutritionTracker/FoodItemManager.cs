@@ -30,7 +30,8 @@ namespace NutritionTracker
             int newCarbs;
             int newFats;
 
-            if (!int.TryParse(caloriesText, out newCalories) ||
+            if (string.IsNullOrEmpty(nameText) ||
+                !int.TryParse(caloriesText, out newCalories) ||
                 !int.TryParse(proteinsText, out newProteins) ||
                 !int.TryParse(carbsText, out newCarbs) ||
                 !int.TryParse(fatsText, out newFats))

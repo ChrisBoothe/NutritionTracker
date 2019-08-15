@@ -13,7 +13,7 @@ namespace NutritionTracker
     { 
         //Add method to generate PDF report
         //Add unit testing class
-        //Add input validation for food Name
+        //Data must display even after input validation fails
 
         protected void Page_Load(object sender, EventArgs e)
         {   
@@ -30,7 +30,7 @@ namespace NutritionTracker
 
         protected void addButton_Click(object sender, EventArgs e)
         { 
-            var foodItemManager = new FoodItemManager();            
+            var foodItemManager = new FoodItemManager();
 
             if (!foodItemManager.ValidateUserInput(foodItemManager.NewFoodItem, 
                 newNameTextBox.Text, 
@@ -39,7 +39,7 @@ namespace NutritionTracker
                 newCarbsTextBox.Text, 
                 newFatsTextBox.Text))
             {
-                errorLabel.Text = "You must input a valid number!";
+                errorLabel.Text = "You must use a valid name and number!";
                 return;
             }
             
