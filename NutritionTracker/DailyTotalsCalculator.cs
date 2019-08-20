@@ -24,10 +24,10 @@ namespace NutritionTracker
             TotalProteins = 0;
             TotalCarbs = 0;
             TotalFats = 0;            
-            PercentProteins = 0.0;
-            PercentCarbs = 0.0;
-            PercentFats = 0.0;
-            _totalMacros = 0.0;            
+            PercentProteins = 0;
+            PercentCarbs = 0;
+            PercentFats = 0;
+            _totalMacros = 0;            
         }
 
         public void SumMacros(DbSet<FoodItem> dbFoodItems)
@@ -42,7 +42,7 @@ namespace NutritionTracker
                 }   
         }
 
-        public void DetermineRatio(DbSet<FoodItem> dbFoodItems)
+        public void DetermineRatio()
         {
             _totalMacros = ((TotalProteins * 4) + (TotalCarbs * 4) + (TotalFats * 9));
             PercentProteins = ((TotalProteins * 4) / _totalMacros) * 100;

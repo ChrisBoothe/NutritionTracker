@@ -12,8 +12,8 @@ namespace NutritionTracker
     public partial class Default : System.Web.UI.Page
     { 
         //Add method to generate PDF report
-        //Add unit testing class
-        //Data must display even after input validation fails
+        //Add unit testing class        
+
 
         protected void Page_Load(object sender, EventArgs e)
         {   
@@ -21,7 +21,8 @@ namespace NutritionTracker
             {
                 var foodItemManager = new FoodItemManager();                                
                 foodItemManager.Calculator.SumMacros(foodItemManager.DbFoodItems);
-                foodItemManager.Calculator.DetermineRatio(foodItemManager.DbFoodItems);
+                if (foodItemManager.Calculator.TotalCalories > 0)
+                    foodItemManager.Calculator.DetermineRatio();
                 DisplayData(foodItemManager.Calculator, foodItemManager.DbFoodItems);
             }
 
@@ -39,13 +40,16 @@ namespace NutritionTracker
                 newCarbsTextBox.Text, 
                 newFatsTextBox.Text))
             {
+                foodItemManager.Calculator.SumMacros(foodItemManager.DbFoodItems);
+                foodItemManager.Calculator.DetermineRatio();
+                DisplayData(foodItemManager.Calculator, foodItemManager.DbFoodItems);
                 errorLabel.Text = "You must use a valid name and number!";
                 return;
             }
             
             foodItemManager.UpdateDatabase();
             foodItemManager.Calculator.SumMacros(foodItemManager.DbFoodItems);
-            foodItemManager.Calculator.DetermineRatio(foodItemManager.DbFoodItems);
+            foodItemManager.Calculator.DetermineRatio();
             DisplayData(foodItemManager.Calculator, foodItemManager.DbFoodItems);
         }        
 
